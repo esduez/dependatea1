@@ -1,43 +1,39 @@
 {
   "name": "dependatea1",
-  "version": "1.0.1",
-  "description": "Enhanced TEA-integrated dependency manager",
-  "main": "lib/index.js",
+  "version": "1.0.0",
+  "description": "TEA Protocol integrated advanced dependency manager",
+  "main": "src/core/index.js",
   "bin": {
-    "dependatea1": "./bin/dependatea.js"
+    "dtea": "./src/cli/index.js"
   },
+  "type": "module",
   "scripts": {
-    "test": "mocha test/**/*.test.js",
+    "start": "node src/cli/index.js",
+    "test": "NODE_ENV=test mocha test/unit/**/*.test.js",
+    "test:integration": "NODE_ENV=test mocha test/integration/**/*.test.js",
     "lint": "eslint .",
-    "coverage": "nyc mocha test/**/*.test.js",
-    "start": "node bin/dependatea.js",
-    "prepublish": "npm run lint && npm test"
+    "coverage": "nyc npm test",
+    "build": "rollup -c",
+    "prepublish": "npm run build"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
-    "commander": "^9.4.1",
-    "execa": "^6.1.0",
-    "fs-extra": "^11.1.0",
-    "inquirer": "^8.2.5",
-    "ora": "^6.1.2",
-    "semver": "^7.3.8",
-    "yaml": "^2.1.3"
+    "@tea/protocol": "^0.8.2",
+    "chalk": "^5.0.1",
+    "commander": "^10.0.0",
+    "figlet": "^1.5.2",
+    "inquirer": "^9.1.4",
+    "ora": "^6.1.2"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "chai": "^4.3.7",
-    "eslint": "^8.28.0",
-    "mocha": "^10.1.0",
+    "eslint": "^8.32.0",
+    "mocha": "^10.2.0",
     "nyc": "^15.1.0",
+    "rollup": "^3.9.1",
     "sinon": "^15.0.1"
   },
-  "keywords": [
-    "tea",
-    "dependency",
-    "manager",
-    "npm",
-    "package"
-  ],
-  "engines": {
-    "node": ">=16.0.0"
+  "tea": {
+    "compatibility": "^0.8.0"
   }
 }
