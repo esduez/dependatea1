@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { program } = require('commander');
 const { version } = require('../package.json');
-const commands = require('../lib/commands');
+const { install, list, update } = require('../lib/commands');
 
 program
   .name('dependatea')
@@ -11,16 +11,17 @@ program
 program
   .command('install <packages...>')
   .description('Install packages')
-  .action(commands.install);
+  .option('-D, --dev', 'As dev dependency')
+  .action(install);
 
 program
   .command('list')
   .description('List dependencies')
-  .action(commands.list);
+  .action(list);
 
 program
   .command('update [package]')
   .description('Update package')
-  .action(commands.update);
+  .action(update);
 
 program.parse(process.argv);
