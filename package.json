@@ -1,0 +1,45 @@
+{
+  "name": "dependatea",
+  "version": "1.0.0",
+  "description": "TEA entegreli gelişmiş bağımlılık yöneticisi",
+  "main": "lib/index.js",
+  "bin": {
+    "dependatea": "./bin/dependatea.js"
+  },
+  "scripts": {
+    "test": "mocha test/**/*.test.js",
+    "lint": "eslint .",
+    "prepublish": "npm run lint && npm test",
+    "start": "node bin/dependatea.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^9.4.1",
+    "execa": "^6.1.0",
+    "fs-extra": "^11.1.0",
+    "inquirer": "^8.2.5",
+    "ora": "^6.1.2",
+    "semver": "^7.3.8",
+    "yaml": "^2.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.28.0",
+    "mocha": "^10.1.0",
+    "sinon": "^15.0.1",
+    "chai": "^4.3.7"
+  },
+  "keywords": [
+    "tea",
+    "dependency",
+    "manager",
+    "npm",
+    "package"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "tea": {
+    "registry": "https://registry.tea.xyz",
+    "defaultEnv": "production"
+  }
+}
