@@ -1,13 +1,14 @@
-name: DependaTEA CI
+name: DependaTEA1 CI Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
 jobs:
   test:
+    name: Test on Node.js ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,20 +17,47 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     
-    - name: Install TEA
+    - name: Install TEA CLI
       run: sh <(curl https://tea.xyz)
     
     - name: Install dependencies
-      run: npm install
+      run: npm ci
       
-    - name: Run tests
-      run: npm test
+    - name: Run tests with coverage
+      run: npm run coverage
+      
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
       
     - name: Lint
       run: npm run lint
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+    
+    - run: npm ci
+    - run: npm test
+    
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.ref }}
+        release_name: Release v${{ github.ref }}
+        draft: false
+        prerelease: false
