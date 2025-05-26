@@ -1,30 +1,52 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const { program } = require('commander');
 const { version } = require('../package.json');
-const { install, list, update } = require('../lib/commands');
+const logger = require('../lib/utils/logger');
+const commands = require('../lib/commands');
 
+// Initialize CLI
 program
-  .name('dependatea1')
+  .name('dependatea')
   .version(version)
-  .description('TEA entegreli bağımlılık yöneticisi - Gelişmiş Sürüm');
+  .description('TEA Protocol integrated dependency manager')
+  .configureOutput({
+    outputError: (err, write) => logger.error(err.replace('error: ', ''))
+  });
 
+// Install command
 program
   .command('install <packages...>')
-  .description('Bir veya daha fazla paket yükle')
-  .option('-D, --dev', 'Geliştirme bağımlılığı olarak ekle')
-  .option('-g, --global', 'Global olarak yükle')
-  .action(install);
+  .description('Install one or more packages')
+  .option('-D, --dev', 'Install as dev dependency')
+  .option('-g, --global', 'Install globally')
+  .option('-E, --exact', 'Install exact version')
+  .action(commands.install);
 
+// List command
 program
   .command('list')
-  .description('Yüklü bağımlılıkları listele')
-  .option('-g, --global', 'Global bağımlılıkları listele')
-  .action(list);
+  .description('List installed dependencies')
+  .option('-g, --global', 'List global dependencies')
+  .action(commands.list);
 
+// Update command
 program
   .command('update [package]')
-  .description('Paket(ler)i güncelle')
-  .action(update);
+  .description('Update package(s)')
+  .option('-g, --global', 'Update global package')
+  .action(commands.update);
 
-program.parse(process.argv);
+// Handle unknown commands
+program.on('command:*', () => {
+  logger.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
+  process.exit(1);
+});
+
+// Parse arguments
+program.parseAsync(process.argv).catch(err => {
+  logger.error(err.message);
+  process.exit(1);
+});
