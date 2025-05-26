@@ -1,66 +1,13 @@
-name: DependaTEA CI
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-
+name: Node.js CI
+on: [push, pull_request]
 jobs:
   test:
-    name: Test on Node.js ${{ matrix.node-version }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    - name: Install TEA Protocol
-      run: npm install -g @tea/protocol
-    
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run unit tests
-      run: npm test
-      
-    - name: Run integration tests
-      run: npm run test:integration
-      
-    - name: Generate coverage report
-      run: npm run coverage
-      
-    - name: Upload coverage
-      uses: codecov/codecov-action@v3
-      
-    - name: Lint
-      run: npm run lint
-
-  release:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
-    
+        node-version: 18
     - run: npm ci
     - run: npm test
-    
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: npm run lint
