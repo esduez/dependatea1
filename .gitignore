@@ -1,23 +1,6 @@
-# Dependencies
 node_modules/
 .tea_cache/
-
-# Test and coverage
 coverage/
-.nyc_output/
-
-# Logs
 *.log
-npm-debug.log*
-
-# Environment
-.env
-.env.test
-
-# IDE
-.vscode/
-.idea/
-
-# System
 .DS_Store
-Thumbs.db
+.env
