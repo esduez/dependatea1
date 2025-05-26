@@ -1,58 +1,32 @@
 {
   "name": "dependatea1",
   "version": "1.0.0",
-  "description": "TEA Protocol integrated advanced dependency manager",
+  "description": "TEA-integrated dependency manager",
   "main": "lib/index.js",
   "bin": {
     "dependatea": "./bin/dependatea.js"
   },
   "scripts": {
     "start": "node bin/dependatea.js",
-    "dev": "nodemon bin/dependatea.js",
-    "test": "NODE_ENV=test mocha test/unit/**/*.test.js",
-    "test:integration": "NODE_ENV=test mocha test/integration/**/*.test.js",
-    "test:watch": "npm test -- --watch",
+    "test": "mocha test/unit/**/*.test.js",
+    "test:integration": "mocha test/integration/**/*.test.js",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "coverage": "nyc npm test",
-    "precommit": "npm run lint && npm test",
-    "prepublish": "npm run lint && npm test && npm run coverage"
+    "coverage": "nyc npm test"
   },
   "dependencies": {
-    "@tea/sdk": "^1.2.0",
+    "@tea/sdk": "^1.0.0",
     "chalk": "^4.1.2",
     "commander": "^9.4.1",
     "execa": "^6.1.0",
     "fs-extra": "^11.1.0",
-    "inquirer": "^8.2.5",
     "ora": "^6.1.2",
-    "semver": "^7.3.8",
     "yaml": "^2.1.3"
   },
   "devDependencies": {
     "chai": "^4.3.7",
     "eslint": "^8.28.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.1.0",
-    "nodemon": "^2.0.20",
     "nyc": "^15.1.0",
-    "prettier": "^2.8.0",
     "sinon": "^15.0.1"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "keywords": [
-    "tea",
-    "dependency",
-    "manager",
-    "npm",
-    "package"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/esduez/dependatea1.git"
-  },
-  "license": "MIT"
+  }
 }
