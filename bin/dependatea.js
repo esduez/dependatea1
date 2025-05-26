@@ -2,32 +2,29 @@
 
 const { program } = require('commander');
 const { version } = require('../package.json');
-const commands = require('../lib/commands');
+const { install, list, update } = require('../lib/commands');
 
 program
-  .name('dependatea')
+  .name('dependatea1')
   .version(version)
-  .description('TEA entegreli gelişmiş bağımlılık yöneticisi');
+  .description('TEA entegreli bağımlılık yöneticisi - Gelişmiş Sürüm');
 
-// Install komutu
 program
   .command('install <packages...>')
   .description('Bir veya daha fazla paket yükle')
   .option('-D, --dev', 'Geliştirme bağımlılığı olarak ekle')
   .option('-g, --global', 'Global olarak yükle')
-  .action(commands.install);
+  .action(install);
 
-// List komutu
 program
   .command('list')
   .description('Yüklü bağımlılıkları listele')
   .option('-g, --global', 'Global bağımlılıkları listele')
-  .action(commands.list);
+  .action(list);
 
-// Update komutu
 program
   .command('update [package]')
   .description('Paket(ler)i güncelle')
-  .action(commands.update);
+  .action(update);
 
 program.parse(process.argv);
