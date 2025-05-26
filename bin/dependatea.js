@@ -6,22 +6,22 @@ const { install, list, update } = require('../lib/commands');
 program
   .name('dependatea')
   .version(version)
-  .description('TEA-integrated dependency manager');
+  .description('TEA-integrated dependency manager')
+  .showHelpAfterError();
 
-program
-  .command('install <packages...>')
+// Install Command
+program.command('install <packages...>')
   .description('Install packages')
-  .option('-D, --dev', 'As dev dependency')
   .action(install);
 
-program
-  .command('list')
+// List Command
+program.command('list')
   .description('List dependencies')
   .action(list);
 
-program
-  .command('update [package]')
+// Update Command
+program.command('update [package]')
   .description('Update package')
   .action(update);
 
-program.parse(process.argv);
+program.parse();
