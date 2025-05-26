@@ -1,32 +1,74 @@
 {
   "name": "dependatea1",
   "version": "1.0.0",
-  "description": "TEA-integrated dependency manager",
+  "description": "TEA-entegreli bağımlılık yöneticisi",
   "main": "lib/index.js",
   "bin": {
     "dependatea": "./bin/dependatea.js"
   },
   "scripts": {
     "start": "node bin/dependatea.js",
-    "test": "mocha test/unit/**/*.test.js",
-    "test:integration": "mocha test/integration/**/*.test.js",
+    "test": "mocha --config test/mocha.opts",
+    "test:watch": "mocha --config test/mocha.opts --watch",
+    "test:coverage": "nyc mocha --config test/mocha.opts",
     "lint": "eslint .",
-    "coverage": "nyc npm test"
+    "lint:fix": "eslint . --fix",
+    "prepublish": "npm run test && npm run lint",
+    "prepare": "husky install"
   },
   "dependencies": {
-    "@tea/sdk": "^1.0.0",
+    "@tea/sdk": "^1.2.0",
     "chalk": "^4.1.2",
     "commander": "^9.4.1",
     "execa": "^6.1.0",
     "fs-extra": "^11.1.0",
+    "inquirer": "^8.2.5",
     "ora": "^6.1.2",
+    "semver": "^7.3.8",
     "yaml": "^2.1.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.22.15",
+    "@babel/register": "^7.22.15",
+    "@types/node": "^18.16.19",
     "chai": "^4.3.7",
-    "eslint": "^8.28.0",
-    "mocha": "^10.1.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "sinon": "^15.0.1"
+    "prettier": "^2.8.8",
+    "sinon": "^15.2.0",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "keywords": [
+    "tea",
+    "dependency",
+    "manager",
+    "npm",
+    "package"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/esduez/dependatea1.git"
+  },
+  "license": "MIT",
+  "nyc": {
+    "include": [
+      "lib/**/*.js"
+    ],
+    "exclude": [
+      "test/**",
+      "**/*.spec.js"
+    ],
+    "reporter": [
+      "text",
+      "lcov"
+    ]
   }
 }
