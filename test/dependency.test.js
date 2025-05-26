@@ -1,25 +1,50 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
+const fs = require('fs-extra');
+const execa = require('execa');
 const DependencyManager = require('../lib/managers/dependency');
 
 describe('DependencyManager', () => {
-  let depManager;
+  let manager;
+  let sandbox;
 
   beforeEach(() => {
-    depManager = new DependencyManager();
+    sandbox = sinon.createSandbox();
+    manager = new DependencyManager();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   describe('#install()', () => {
-    it('should install packages with TEA when enabled', async () => {
-      const execaStub = sinon.stub(require('execa'), 'command').resolves();
-      const fsStub = sinon.stub(require('fs-extra'));
+    it('should validate package names', async () => {
+      try {
+        await manager.install(['invalid-package!']);
+        expect.fail('Should have thrown error');
+      } catch (error) {
+        expect(error.message).to.include('Invalid package name');
+      }
+    });
+
+    it('should call tea install for valid packages', async () => {
+      sandbox.stub(execa, 'command').resolves({ stdout: 'success' });
+      sandbox.stub(fs, 'pathExists').resolves(false);
       
-      fsStub.pathExists.resolves(true);
-      fsStub.readJson.resolves({ dependencies: {} });
+      await manager.install(['lodash']);
+      expect(execa.command.calledWith('tea', ['install', 'lodash'])).to.be.true;
+    });
+  });
+
+  describe('_updateLocalDependencies()', () => {
+    it('should update package.json correctly', async () => {
+      const mockPkg = { dependencies: {} };
+      sandbox.stub(fs, 'readJson').resolves(mockPkg);
+      sandbox.stub(fs, 'writeJson').resolves();
+      sandbox.stub(fs, 'pathExists').resolves(true);
       
-      await depManager.install(['lodash']);
-      
-      expect(execaStub.calledWith('tea', ['install', 'lodash'])).to.be.true;
+      await manager._updateLocalDependencies(['react'], {});
+      expect(mockPkg.dependencies.react).to.equal('^latest');
     });
   });
 });
